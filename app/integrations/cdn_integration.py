@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
 class CdnIntegration(BaseIntegration):
     BASE_URL = ""
+    integration_type = IntegrationType.cdn
 
     async def get_content(self, content: TypedContent) -> CompiledContent:
         return CompiledContent(url=content.project, file=content.version)
@@ -35,4 +36,4 @@ async def get_cdn_integration(
         mod_content_cache_service,
         resourcepack_content_cache_service,
     ]
-    return CdnIntegration(cache_services, IntegrationType.cdn)
+    return CdnIntegration(cache_services)

@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 class CurseforgeIntegration(BaseIntegration):
     BASE_URL = "https://api.curseforge.com/v1"
     API_KEY = get_settings().curseforge_api_key
+    integration_type = IntegrationType.curseforge
 
     async def get_content(self, content: TypedContent) -> CompiledContent:
         url = self.BASE_URL + f"/mods/{content.project}/files/{content.version}"
@@ -47,4 +48,4 @@ async def get_curseforge_integration(
         mod_content_cache_service,
         resourcepack_content_cache_service,
     ]
-    return CurseforgeIntegration(cache_services, IntegrationType.curseforge)
+    return CurseforgeIntegration(cache_services)

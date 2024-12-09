@@ -23,9 +23,8 @@ class BaseIntegration(ABC):
         ContentType.resourcepacks.name: ResourcepackContentCacheService,
     }
 
-    def __init__(self, cache_services: list[CacheService], integration_type: IntegrationType):
+    def __init__(self, cache_services: list[CacheService]):
         self.cache_services = cache_services
-        self.integration_type = integration_type
 
     async def get_cache_service(self, content: TypedContent) -> CacheService | None:
         content_cache_service_class = self.service_map.get(content.content_type.name)
