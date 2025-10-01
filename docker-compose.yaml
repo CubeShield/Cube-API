@@ -1,18 +1,29 @@
 services:
   cube_api:
     build: .
+    command:
+      [
+        "uv",
+        "run",
+        "uvicorn",
+        "--factory",
+        "app:create_app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+      ]
     container_name: cube-api
     env_file:
       - .env
     ports:
-      - ${BACKEND_PORT}:${BACKEND_PORT}
+      - ${BACKEND_PORT}:8000
     depends_on:
       - mongo
     volumes:
       - ~/cube-api-config/instance/:/cube-api/instance/
 
   mongo:
-    command: mongod --quiet --logpath /dev/null
     restart: always
     image: mongo:latest
     container_name: cube-mongodb

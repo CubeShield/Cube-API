@@ -1,15 +1,16 @@
-FROM python:3.11-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-EXPOSE 8000
+WORKDIR /app
 
-RUN pip install --no-cache-dir poetry
+ENV UV_COMPILE_BYTECODE=1
 
-WORKDIR /cube-api
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project --no-dev
 
-COPY pyproject.toml ./
+ADD . /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
 
-RUN poetry install
-
-COPY . ./
-
-CMD ["poetry", "run", "uvicorn", "--factory", "app:create_app", "--host", "0.0.0.0", "--port", "8000"]
+ENV PATH="/app/.venv/bin:$PATH"
